@@ -26,8 +26,12 @@ num_steps_ccw = 0
 
 if __name__ == '__main__':
     # Initialise motor control
-    test_pump = pump.Pump(COIL_1_PINS, COIL_2_PINS, FULL_STEP_SEQUENCE,
-                          SPEED, STEPS)
+    try:
+        test_pump = pump.Pump(COIL_1_PINS, COIL_2_PINS, FULL_STEP_SEQUENCE,
+                              SPEED, STEPS)
+    except RuntimeError:
+        print('pigpiod not initialised. Please run "sudo pigpiod &" first')
+        exit()
 
     # Initialise curses
     screen = curses.initscr()
@@ -37,7 +41,7 @@ if __name__ == '__main__':
     screen.scrollok(True)
 
     screen.addstr('Press UP for clockwise and DOWN for counter-clockwise\n')
-    screen.addstr('Press "X" to exit')
+    screen.addstr('Press "X" to exit\n')
 
     while True:
         input_key = screen.getch()
@@ -45,12 +49,12 @@ if __name__ == '__main__':
         if input_key == curses.KEY_UP:
             test_pump.move_one_revolution(mode='cw')
             num_steps_cw += 1
-            screen.addstr('Moved 1 revolution clockwise')
+            screen.addstr('Moved 1 revolution clockwise\n')
             screen.refresh()
         elif input_key == curses.KEY_DOWN:
             test_pump.move_one_revolution(mode='ccw')
             num_steps_ccw += 1
-            screen.addstr('Moved 1 revolution counter-clockwise')
+            screen.addstr('Moved 1 revolution counter-clockwise\n')
             screen.refresh()
         elif input_key == ord('x'):
             break
