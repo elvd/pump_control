@@ -34,6 +34,10 @@ if __name__ == '__main__':
     curses.noecho()
     curses.cbreak()
     screen.keypad(True)
+    screen.scrollok(True)
+
+    screen.addstr('Press UP for clockwise and DOWN for counter-clockwise\n')
+    screen.addstr('Press "X" to exit')
 
     while True:
         input_key = screen.getch()
@@ -41,9 +45,13 @@ if __name__ == '__main__':
         if input_key == curses.KEY_UP:
             test_pump.move_one_revolution(mode='cw')
             num_steps_cw += 1
+            screen.addstr('Moved 1 revolution clockwise')
+            screen.refresh()
         elif input_key == curses.KEY_DOWN:
             test_pump.move_one_revolution(mode='ccw')
             num_steps_ccw += 1
+            screen.addstr('Moved 1 revolution counter-clockwise')
+            screen.refresh()
         elif input_key == ord('x'):
             break
 
